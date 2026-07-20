@@ -1,0 +1,67 @@
+# Accessible & Modern CSS Reference
+
+## Focus states
+
+- Use `:focus-visible` instead of suppressing `:focus` outlines or showing them on
+  every mouse click. It shows focus rings for keyboard users without cluttering
+  mouse/touch interaction.
+  ```css
+  button:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+  ```
+- Never set `outline: none` without providing a clearly visible replacement.
+
+## Motion preferences
+
+- Wrap non-essential animation/transition in a `prefers-reduced-motion` check:
+  ```css
+  @media (prefers-reduced-motion: no-preference) {
+    .card { transition: transform 0.2s ease; }
+  }
+  ```
+  or the inverse — define the reduced version explicitly:
+  ```css
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+  ```
+
+## Color scheme & contrast
+
+- Support `prefers-color-scheme` (light/dark) rather than assuming one theme.
+- Use `light-dark()` (modern, widely supported) to simplify theming:
+  ```css
+  :root { color-scheme: light dark; }
+  body { background: light-dark(#fff, #111); color: light-dark(#111, #eee); }
+  ```
+- Check `prefers-contrast: more` for users who need higher contrast; don't rely on
+  color alone to convey state — pair with icon/text/pattern.
+- Target WCAG AA contrast ratios: 4.5:1 for normal text, 3:1 for large text/UI components.
+
+## Layout
+
+- Prefer `grid`/`flexbox` with logical properties (`margin-inline`, `padding-block`)
+  over legacy float/positioning hacks — these also adapt better to RTL languages.
+- Use `gap` instead of margin-based spacing hacks in flex/grid containers.
+- Use container queries (`@container`) for component-level responsiveness where
+  appropriate, rather than only viewport-based media queries.
+
+## Text & readability
+
+- Avoid `font-size` in fixed px for body text; use `rem` so it respects user
+  browser zoom/font-size settings.
+- Set a reasonable `max-width` (e.g. `65ch`) on long text blocks for readability.
+- Ensure line-height is at least 1.5 for body text (WCAG 1.4.12).
+
+## Interactive element sizing
+
+- Touch targets should be at least 24x24px (WCAG 2.2 AA), ideally 44x44px, with
+  adequate spacing between adjacent targets.
+
+## Things to avoid
+
+- `user-select: none` on primary content text.
+- Removing `resize` on form textareas without reason.
+- Fixed viewport zoom disabling (`user-scalable=no` in viewport meta) — never do this.

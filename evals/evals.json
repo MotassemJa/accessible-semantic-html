@@ -1,0 +1,23 @@
+{
+  "skill_name": "accessible-semantic-html",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Build me a settings panel with a dark mode toggle and a modal for confirming account deletion.",
+      "expected_output": "Uses native <dialog> with showModal/close, proper focus move on open and return-to-trigger on close, Escape-to-close, aria-labelledby on the dialog. Dark mode uses prefers-color-scheme / light-dark() rather than only a manual class toggle. Toggle control is a real checkbox/button with visible state, not an unlabeled div.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Create a product filter sidebar with a dropdown multi-select and a live-updating result count.",
+      "expected_output": "Multi-select uses either native <select multiple> or a correctly structured combobox/listbox ARIA pattern with keyboard support. Result count uses aria-live=\"polite\" region that exists in the DOM before updates, not injected fresh each time. No aria-hidden misuse.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Write a simple contact form with client-side validation.",
+      "expected_output": "Every input has an associated <label> (not placeholder-only). Uses native validation attributes (required, type=\"email\", pattern) as first layer. Errors are associated via aria-describedby and announced via aria-live. Focus states use :focus-visible. Submit button is a real <button>.",
+      "files": []
+    }
+  ]
+}
