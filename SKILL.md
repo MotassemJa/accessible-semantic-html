@@ -46,6 +46,10 @@ Write HTML, CSS, and JavaScript the way the platform intends: semantic markup fi
 - [ ] Color/contrast isn't the only signal for state or meaning; contrast meets WCAG AA
 - [ ] Motion/animation respects `prefers-reduced-motion`
 - [ ] Focus order is logical; focus is managed on dynamic changes (e.g., modal open)
+- [ ] Form validation styling uses `:user-valid`/`:user-invalid`, not bare `:valid`/`:invalid`
+      that flags empty required fields before the user has touched them
+- [ ] Dialog/popover open-close buttons use `command`/`commandfor` where practical,
+      instead of a JS click handler calling `.showModal()`/`.close()`/`.togglePopover()`
 - [ ] No deprecated or non-standard APIs used without a stated reason
 
 ## When to consult reference files

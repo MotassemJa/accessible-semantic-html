@@ -16,6 +16,35 @@ the pattern for assistive tech users even if it "looks" accessible visually.
 - Trap focus within the dialog while open (native `<dialog>` does this for you).
 - `Escape` closes the dialog; closing returns focus to the trigger element.
 - Label with `aria-labelledby` pointing to the dialog's heading.
+- For the open/close trigger buttons, prefer `command="show-modal"`/`command="close"`
+  with `commandfor="dialog-id"` over a JS click handler calling `.showModal()`/`.close()`
+  — see references/modern-apis.md.
+
+## Popover
+
+- `popover` turns *any* element into a top-layer, non-modal overlay — unlike
+  `<dialog>`, it doesn't block interaction with the rest of the page and light-dismisses
+  (closes) on outside click or `Escape` by default.
+- **Popovers have no inherent ARIA role** (a `<dialog>` implies `role="dialog"`).
+  Add the role that matches what the popover actually is — `role="menu"` for a menu,
+  `role="tooltip"` for a tooltip, `role="listbox"` for a listbox, etc. — don't leave
+  it roleless just because it "looks" like the right pattern visually.
+- Trigger with `popovertarget="popover-id"` (add `popovertargetaction="show"/"hide"`
+  if you need a button that only opens or only closes), or with `command`/`commandfor`
+  (`command="toggle-popover"` / `"show-popover"` / `"hide-popover"`) — prefer
+  `command`/`commandfor` for new code since it also covers dialogs with the same
+  attribute pair.
+- Style open state with the `:popover-open` pseudo-class; style the backdrop (for
+  `popover="auto"`) with `::backdrop`.
+- Use `popover="manual"` instead of the default `popover="auto"` when you need the
+  popover to stay open through outside clicks (e.g. a toolbar with its own internal
+  focus movement); `popover="hint"` for non-modal hints like a rich tooltip that can
+  coexist with an open `auto` popover.
+- Listen for `beforetoggle`/`toggle` events (with `event.newState`) instead of polling
+  or tracking open state manually in JS.
+- Still needs the same keyboard/focus-management care as any custom widget — the
+  `popover` attribute gives you top-layer positioning and light-dismiss, not the
+  full interaction pattern for whatever role you've applied.
 
 ## Tabs
 

@@ -16,7 +16,25 @@
     {
       "id": 3,
       "prompt": "Write a simple contact form with client-side validation.",
-      "expected_output": "Every input has an associated <label> (not placeholder-only). Uses native validation attributes (required, type=\"email\", pattern) as first layer. Errors are associated via aria-describedby and announced via aria-live. Focus states use :focus-visible. Submit button is a real <button>.",
+      "expected_output": "Every input has an associated <label> (not placeholder-only). Uses native validation attributes (required, type=\"email\", pattern) as first layer. Errors are associated via aria-describedby and announced via aria-live. Focus states use :focus-visible. Submit button is a real <button>. Validity styling uses :user-invalid/:user-valid rather than bare :invalid, so errors don't show before the user has interacted with the field.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "Build a toolbar overflow menu: a button that opens a menu of extra actions, plus a separate button in that menu that closes it.",
+      "expected_output": "Menu is a popover-attribute element with role=\"menu\" (popovers have no inherent role). Open/close buttons use command/commandfor (e.g. command=\"toggle-popover\"/\"hide-popover\") rather than JS click handlers calling showPopover()/hidePopover(). Menu items are role=\"menuitem\" with arrow-key navigation and typeahead; Escape closes and returns focus to the trigger.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "Build a client-side-routed multi-page app shell with a nav sidebar that swaps the main content without a full page reload.",
+      "expected_output": "Uses the Navigation API (navigation.addEventListener('navigate', ...) + event.intercept()) rather than manually wiring click handlers, history.pushState(), and popstate. Focus is managed on navigation (e.g. moved to the new main content or its heading) rather than left on the now-stale trigger link.",
+      "files": []
+    },
+    {
+      "id": 6,
+      "prompt": "Build a tag/label picker where users choose a background color for a tag and the tag text needs to stay readable.",
+      "expected_output": "Text color on the tag is computed with the CSS contrast-color() function (color: contrast-color(var(--tag-color))) rather than a hardcoded color, a JS luminance calculation, or always-black/white text. Includes a plain fallback color declaration before it for browsers without support.",
       "files": []
     }
   ]

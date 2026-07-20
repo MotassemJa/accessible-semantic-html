@@ -39,6 +39,29 @@
 - Check `prefers-contrast: more` for users who need higher contrast; don't rely on
   color alone to convey state — pair with icon/text/pattern.
 - Target WCAG AA contrast ratios: 4.5:1 for normal text, 3:1 for large text/UI components.
+- For text color against a dynamic/user-generated background (theme pickers, tags,
+  avatars), use `contrast-color()` instead of a hand-picked or JS-computed black/white:
+  ```css
+  .tag { background: var(--tag-color); color: contrast-color(var(--tag-color)); }
+  ```
+  It picks whichever of black/white contrasts best against the given color. Baseline
+  newly available (Chrome/Edge/Firefox 146+, Safari 26+) — provide a `color: #000`
+  fallback declaration before it for older browsers, since `@supports` on a color
+  function value isn't reliable.
+
+## Form validation styling
+
+- Style validity with `:user-valid`/`:user-invalid` instead of `:valid`/`:invalid`
+  for feedback shown as the user types. `:invalid` matches an empty required field
+  immediately on page load; `:user-valid`/`:user-invalid` only match after the user
+  has meaningfully interacted with the field, so errors don't appear before they've
+  had a chance to fill anything in.
+  ```css
+  input:user-invalid { border-color: var(--color-error); }
+  input:user-valid { border-color: var(--color-success); }
+  ```
+- This replaces manually tracking "has this field been touched/changed" in JS with
+  a `blur`/`input` listener and a class toggle — the browser tracks it natively.
 
 ## Layout
 
