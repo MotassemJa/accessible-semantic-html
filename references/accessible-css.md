@@ -1,5 +1,47 @@
 # Accessible & Modern CSS Reference
 
+## Design tokens & custom properties
+
+- Prefer CSS custom properties (`--color-error`, `--space-md`, `--radius-sm`, etc.)
+  over hardcoded color/spacing/radius/font values sprinkled through selectors —
+  define them once (`:root` or a theme scope) and reference them with `var()`.
+- This isn't just tidiness: it's what makes `prefers-color-scheme`/`light-dark()`
+  theming, user-customizable themes, and consistent focus/contrast values
+  maintainable in the first place — a hardcoded `#111` can't respond to a theme
+  or contrast preference change the way `var(--color-text)` can.
+- If the project already has a design token system (Style Dictionary output, a
+  design-system package, Tailwind theme values, etc.), use those tokens instead
+  of introducing parallel ad hoc values.
+
+## Cascade & specificity
+
+- Use `@layer` to control cascade order instead of reaching for `!important` or
+  piling on extra selectors to win specificity fights:
+  ```css
+  @layer reset, base, components, utilities;
+
+  @layer base {
+    button { color: var(--color-text); }
+  }
+  @layer components {
+    .btn-primary { color: var(--color-on-accent); }
+  }
+  ```
+  Layers declared earlier lose to layers declared later regardless of selector
+  specificity within them, so ordering the layers (not stacking classes/IDs) is
+  what decides precedence.
+- Avoid `!important` — it breaks the normal cascade for everyone downstream (including
+  assistive-tech-relevant overrides like a consumer's focus-visible or contrast
+  styles) and is a sign the underlying specificity/layer structure needs fixing,
+  not patching over.
+- Avoid complex/deeply-nested selectors (`.a .b > .c + .d span`) for the same
+  reason — they're both hard to override intentionally later and easy to
+  accidentally override. Prefer a single class per styled concern.
+- Avoid overriding another component/library's styles when possible — if a shared
+  component doesn't support the variant you need, extend it via its documented
+  API (props, CSS custom property hooks, slots) rather than fighting its CSS from
+  the outside.
+
 ## Focus states
 
 - Use `:focus-visible` instead of suppressing `:focus` outlines or showing them on
@@ -70,6 +112,26 @@
 - Use `gap` instead of margin-based spacing hacks in flex/grid containers.
 - Use container queries (`@container`) for component-level responsiveness where
   appropriate, rather than only viewport-based media queries.
+- For elements that need to be positioned relative to a trigger (tooltips, popover
+  menus, autocomplete suggestion lists, context menus), prefer
+  [CSS anchor positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Anchor_positioning)
+  over a JS positioning library (Floating UI/Popper) or manual `getBoundingClientRect()`
+  math:
+  ```css
+  .trigger { anchor-name: --my-anchor; }
+  .tooltip {
+    position: fixed;
+    position-anchor: --my-anchor;
+    position-area: bottom center;
+    position-try-fallbacks: top center, left center, right center;
+    position-visibility: auto; /* hide rather than render off-screen/clipped */
+  }
+  ```
+  Combine with `position-try-fallbacks` so the browser flips the element to a side
+  that still fits the viewport instead of letting it render cut off, and pair it
+  with the Popover API/`popover` attribute (see references/aria-patterns.md) for
+  the open/close and light-dismiss behavior. This is a newer feature — verify
+  current browser support before relying on it without a fallback.
 
 ## Text & readability
 
